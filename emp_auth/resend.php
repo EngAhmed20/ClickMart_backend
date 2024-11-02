@@ -1,0 +1,10 @@
+<?php
+include("../connect.php");
+$email=filterRequest('email');
+$verifyCode=rand(00000,99999);
+$data=array(
+    "users_verifycode"=>$verifyCode
+);
+updateData("users",$data,"users_email=$email");
+//sendMail($email,"verifyCode","$verifyCode");
+?>

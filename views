@@ -1,0 +1,17 @@
+CREATE OR REPLACE VIEW orders_view AS
+SELECT orders.*,address.* 
+FROM orders INNER JOIN address on address.address_id=orders.orders_address
+
+
+CREATE OR REPLACE VIEW orderDetails_view AS
+SELECT SUM(items.items_price-items.items_price*items.items_discount/100)AS 
+itemsprice, COUNT(cart.cart_itemsid) AS countitems,cart.*,items.*,orders_view.* FROM cart 
+INNER JOIN items ON items.items_id=cart.cart_itemsid
+INNER JOIN orders_view ON orders_view.orders_id=cart.cart_orders
+WHERE cart.cart_orders !=0
+GROUP BY cart.cart_itemsid,cart.cart_usersid,cart.cart_orders
+
+///////////most sell
+SELECT COUNT(cart.cart_id)AS count_items,cart.* FROM cart WHERE cart_orders!=0 GROUP BY cart_itemsid;
+or 
+SELECT COUNT(cart.cart_itemsid)AS count_items,cart.* FROM cart WHERE cart_orders!=0 GROUP BY cart_itemsid;
